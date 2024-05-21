@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 from langchain_groq import ChatGroq
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -8,36 +7,24 @@ from langchain.chains import create_retrieval_chain
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-#from dotenv import load_dotenv
-import os
-#load_dotenv()
-#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
 
-## load the GROQ And OpenAI API KEY 
-#groq_api_key=os.getenv('GROQ_API_KEY')
 groq_api_key='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'
 os.environ["GOOGLE_API_KEY"]='AIzaSyBCCTKy9jm83GbtDUqzJ9dOe6UeBJBf1Zs'
-
 st.title("Gemma Model Document Q&A")
-
 llm=ChatGroq(groq_api_key=groq_api_key,
              model_name="Llama3-8b-8192")
 
 prompt=ChatPromptTemplate.from_template(
-"""
-Answer the questions based on the provided context only.
+"""Answer the questions based on the provided context only.
 Please provide the most accurate response based on the question
 <context>
 {context}
 <context>
 Questions:{input}
-
-"""
-)
+""")
 
 def vector_embedding():
-
-    if "vectors" not in st.session_state:
+   if "vectors" not in st.session_state:
 
         st.session_state.embeddings=GoogleGenerativeAIEmbeddings(model = "models/embedding-001")
         st.session_state.loader=PyPDFDirectoryLoader("./py") ## Data Ingestion
@@ -47,20 +34,11 @@ def vector_embedding():
         st.session_state.vectors=FAISS.from_documents(st.session_state.final_documents,st.session_state.embeddings) #vector OpenAI embeddings
 
 
-
-
-
 prompt1=st.text_input("Enter Your Question From Doduments")
-
-
 if st.button("Documents Embedding"):
     vector_embedding()
     st.write("Vector Store DB Is Ready")
-
 import time
-
-
-
 if prompt1:
     document_chain=create_stuff_documents_chain(llm,prompt)
     retriever=st.session_state.vectors.as_retriever()
