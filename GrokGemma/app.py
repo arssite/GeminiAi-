@@ -8,8 +8,8 @@ from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFDirectoryLoader
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-groq_api_key='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'
-os.environ["GOOGLE_API_KEY"]='AIzaSyBCCTKy9jm83GbtDUqzJ9dOe6UeBJBf1Zs'
+groq_api_key=''
+os.environ["GOOGLE_API_KEY"]=''
 st.title("Gemma Model Document Q&A")
 llm=ChatGroq(groq_api_key=groq_api_key,
              model_name="Llama3-8b-8192")
